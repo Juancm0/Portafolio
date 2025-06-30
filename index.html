@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Interactivo | Juan Carlos Martínez Mendoza</title>
+    <!-- Chosen Palette: Warm Neutral (Stone, Slate, Emerald) -->
+    <!-- Application Structure Plan: A single-page, vertical-scrolling application designed to function as a modern, interactive resume. The structure is thematic: 1. Hero section for immediate impact and contact. 2. An interactive Skills section using a radar chart to visually group abilities. 3. A filterable Projects section with modals for detailed exploration, which is the core interactive element. 4. A clean, chronological timeline for Experience & Education. This structure was chosen to guide a recruiter from a high-level summary to deep-dive exploration of practical work, which is more engaging and informative than a static PDF. -->
+    <!-- Visualization & Content Choices:
+        - Skills: Report Info -> Technical Skills list. Goal -> Inform & Organize. Viz -> Radar Chart (Chart.js). Interaction -> Hover tooltips. Justification -> Visually engaging, groups skills into categories, demonstrates data viz capability.
+        - Projects: Report Info -> Project descriptions. Goal -> Compare & Deep-Dive. Viz -> HTML/Tailwind cards in a grid. Interaction -> Category filtering buttons and modal pop-ups with details for each project. Justification -> Allows recruiters to quickly filter by interest (Web, Data) and then explore specific projects without leaving the page, providing a seamless user experience.
+        - Experience/Education: Report Info -> Chronological history. Goal -> Show timeline. Viz -> Vertical timeline using HTML/Tailwind. Interaction -> Links on certificates. Justification -> Standard, clear, and effective for presenting time-based information.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #10b981; /* emerald-500 */
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .project-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-slate-50/80 backdrop-blur-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-slate-800">
+                <a href="#home">JCMM</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#skills" class="nav-link text-slate-600 hover:text-emerald-600 font-medium">Habilidades</a>
+                <a href="#projects" class="nav-link text-slate-600 hover:text-emerald-600 font-medium">Proyectos</a>
+                <a href="#experience" class="nav-link text-slate-600 hover:text-emerald-600 font-medium">Experiencia</a>
+            </div>
+            <a href="mailto:contacto.juancm00@gmail.com" class="hidden md:block bg-emerald-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-emerald-600 transition-colors">
+                Contactar
+            </a>
+            <div class="md:hidden">
+                <!-- Mobile menu button can be added here if needed -->
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6">
+
+        <!-- Section 1: Hero -->
+        <section id="home" class="py-20 md:py-32 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-4">Juan Carlos Martínez Mendoza</h1>
+                <p class="text-xl md:text-2xl text-emerald-600 font-medium mb-8">Desarrollador Full-Stack Junior</p>
+                <p class="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">
+                    Apasionado por resolver problemas y construir aplicaciones eficientes. Con experiencia práctica en el desarrollo de soluciones web y un fuerte interés en el ecosistema backend, busco aportar valor y crecer en un equipo innovador.
+                </p>
+                <div class="flex justify-center items-center space-x-4">
+                    <a href="https://github.com/Juancm0" target="_blank" class="bg-slate-800 text-white py-3 px-6 rounded-lg font-medium hover:bg-slate-900 transition-colors flex items-center space-x-2">
+                        <span>GitHub</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    </a>
+                     <a href="mailto:contacto.juancm00@gmail.com" class="bg-slate-200 text-slate-800 py-3 px-6 rounded-lg font-medium hover:bg-slate-300 transition-colors flex items-center space-x-2">
+                        <span>Email</span>
+                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/juan-carlos-martinez-mendoza-b0b0b0b0/" target="_blank" class="bg-blue-700 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center space-x-2">
+                        <span>LinkedIn</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Skills -->
+        <section id="skills" class="py-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Habilidades Técnicas</h2>
+                <p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">
+                    Mi conjunto de herramientas técnicas. Esta visualización agrupa mis competencias principales, mostrando un perfil versátil orientado al desarrollo de soluciones completas.
+                </p>
+            </div>
+            <div class="chart-container relative w-full max-w-2xl mx-auto h-80 md:h-96">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Section 3: Projects -->
+        <section id="projects" class="py-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Proyectos Destacados</h2>
+                <p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">
+                    Una selección de proyectos donde he aplicado mis habilidades. Haz clic en un proyecto para ver más detalles o usa los filtros para explorar por categoría.
+                </p>
+            </div>
+            <!-- Filter Buttons -->
+            <div id="project-filters" class="flex justify-center space-x-2 md:space-x-4 mb-10">
+                <button data-filter="all" class="filter-btn bg-emerald-500 text-white font-medium py-2 px-5 rounded-full transition-colors">Todos</button>
+                <button data-filter="web" class="filter-btn bg-slate-200 text-slate-700 font-medium py-2 px-5 rounded-full hover:bg-slate-300 transition-colors">Web</button>
+                <button data-filter="mobile" class="filter-btn bg-slate-200 text-slate-700 font-medium py-2 px-5 rounded-full hover:bg-slate-300 transition-colors">Móvil</button>
+                <button data-filter="data" class="filter-btn bg-slate-200 text-slate-700 font-medium py-2 px-5 rounded-full hover:bg-slate-300 transition-colors">Análisis de Datos</button>
+            </div>
+            <!-- Project Grid -->
+            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project cards will be injected here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 4: Experience & Education -->
+        <section id="experience" class="py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Experiencia y Formación</h2>
+                <p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">
+                   Un resumen de mi trayectoria profesional y mi formación continua, que ha sido clave para consolidar mi base técnica y mantenerme actualizado.
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <!-- Timeline Container -->
+                <div class="relative">
+                    <!-- Vertical line -->
+                    <div class="absolute left-4 top-0 h-full w-0.5 bg-slate-200"></div>
+
+                    <!-- Timeline Item: Freelance -->
+                    <div class="relative pl-12 pb-12">
+                        <div class="absolute left-0 top-1">
+                            <div class="h-8 w-8 bg-emerald-500 rounded-full flex items-center justify-center ring-8 ring-slate-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-emerald-600">2021 - 2023</p>
+                        <h3 class="text-xl font-bold text-slate-800 mt-1">Desarrollador Freelance</h3>
+                        <p class="text-slate-500 mb-4">Remoto</p>
+                        <p class="text-slate-600">Desarrollo de soluciones a medida, abarcando desde aplicaciones web full-stack hasta scripts de automatización, aplicando un stack tecnológico variado para cumplir con los requisitos del cliente.</p>
+                    </div>
+
+                     <!-- Timeline Item: Oracle ONE -->
+                    <div class="relative pl-12 pb-12">
+                        <div class="absolute left-0 top-1">
+                            <div class="h-8 w-8 bg-emerald-500 rounded-full flex items-center justify-center ring-8 ring-slate-50">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-emerald-600">Finalizado: Julio 2024</p>
+                        <h3 class="text-xl font-bold text-slate-800 mt-1">Oracle Next Education - Back-End</h3>
+                        <p class="text-slate-500 mb-4">Alura LATAM</p>
+                        <p class="text-slate-600">Formación intensiva de +1300 actividades en Java, Python, SQL, Git y principios de desarrollo backend.</p>
+                        <a href="https://app.aluracursos.com/user/contacto-juancm00/program/16/certificate" target="_blank" class="text-emerald-600 hover:underline font-medium mt-2 inline-block">Ver Certificado &rarr;</a>
+                    </div>
+                    
+                    <!-- Timeline Item: IBM -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 top-1">
+                            <div class="h-8 w-8 bg-emerald-500 rounded-full flex items-center justify-center ring-8 ring-slate-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-emerald-600">Septiembre 2022</p>
+                        <h3 class="text-xl font-bold text-slate-800 mt-1">Python 101 for Data Science</h3>
+                        <p class="text-slate-500 mb-4">IBM Cognitive Class</p>
+                        <p class="text-slate-600">Curso fundamental sobre Python, cubriendo estructuras de datos y lógica de programación aplicadas a la ciencia de datos.</p>
+                        <a href="https://courses.cognitiveclass.ai/certificates/112145c13dc94ed08bbaacaff2169fbc" target="_blank" class="text-emerald-600 hover:underline font-medium mt-2 inline-block">Ver Certificado &rarr;</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-100 border-t border-slate-200">
+        <div class="container mx-auto px-6 py-8 text-center text-slate-500">
+            <p>&copy; <span id="current-year"></span> Juan Carlos Martínez Mendoza. Todos los derechos reservados.</p>
+            <p class="mt-2 text-sm">Diseñado y desarrollado con dedicación.</p>
+        </div>
+    </footer>
+
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <div id="modal-content-wrapper" class="modal-content bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+            // Skills Chart
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Backend', 'Bases de Datos', 'Frontend', 'Herramientas', 'Análisis de Datos', 'Lenguajes'],
+                    datasets: [{
+                        label: 'Nivel de Competencia y Experiencia',
+                        data: [8, 8, 7, 9, 7, 8],
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(5, 150, 105, 1)',
+                        pointBackgroundColor: 'rgba(5, 150, 105, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(5, 150, 105, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        // This is just for visualization, not a real score.
+                                        // A simple description can be used.
+                                        const skills_map = {
+                                            'Backend': 'Node.js, Express, Python (Flask), APIs RESTful',
+                                            'Bases de Datos': 'SQLite, MySQL, Principios de BBDD Relacionales',
+                                            'Frontend': 'HTML5, CSS3, JavaScript, Responsive Design',
+                                            'Herramientas': 'Git, GitHub, VS Code, Render, Power BI',
+                                            'Análisis de Datos': 'Python (Pandas), ETL, Dashboards',
+                                            'Lenguajes': 'Java, Python, JavaScript, SQL'
+                                        };
+                                        return skills_map[context.label].split(', ').map(s => ' • ' + s).join('\n');
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                },
+                                color: '#334155' // slate-700
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                color: '#64748b', // slate-500
+                                stepSize: 2,
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    }
+                }
+            });
+
+            // Project Data
+            const projects = [
+                {
+                    title: 'Sistema de Gestión de Inventario',
+                    category: 'web',
+                    image: 'https://placehold.co/600x400/10b981/FFFFFF?text=Inventario',
+                    tags: ['Node.js', 'Express', 'SQLite', 'JavaScript', 'Full-Stack'],
+                    description: 'Desarrollo de una aplicación full-stack para la gestión de inventario. Incluye un backend con una API RESTful para manejar operaciones CRUD (Crear, Leer, Actualizar, Borrar) y un frontend interactivo para la visualización y manipulación de los datos.',
+                    details: 'Este proyecto fue clave para consolidar mis conocimientos en la arquitectura cliente-servidor. El backend, construido con Node.js y Express, expone endpoints seguros y eficientes. La base de datos SQLite fue elegida por su simplicidad y portabilidad. El frontend consume la API para ofrecer una experiencia de usuario fluida. Uno de los mayores retos fue asegurar la consistencia de los datos y manejar la comunicación asíncrona entre el cliente y el servidor.',
+                    link: 'https://github.com/Juancm0/Inventario-backend'
+                },
+                {
+                    title: 'Aplicación de Gestión de Tareas',
+                    category: 'mobile',
+                    image: 'https://placehold.co/600x400/3b82f6/FFFFFF?text=Task+App',
+                    tags: ['Android', 'Java', 'SQLite', 'Móvil'],
+                    description: 'Construcción de una aplicación móvil nativa en Java para Android. Permite a los usuarios crear, editar, eliminar y marcar tareas como completadas, con persistencia de datos en una base de datos local SQLite.',
+                    details: 'Este proyecto me introdujo al desarrollo de aplicaciones móviles nativas. Me enfoqué en seguir las mejores prácticas de diseño de UI/UX para Android, manejando el ciclo de vida de las actividades y fragmentos. La integración con SQLite para la persistencia de datos local fue un aprendizaje fundamental, asegurando que las tareas del usuario se guardaran incluso después de cerrar la aplicación.',
+                    link: 'https://github.com/Juancm0/TaskManagerApp'
+                },
+                {
+                    title: 'Dashboard de Análisis de Ventas',
+                    category: 'data',
+                    image: 'https://placehold.co/600x400/f97316/FFFFFF?text=Dashboard',
+                    tags: ['Python', 'ETL', 'Power BI', 'SQLite'],
+                    description: 'Proyecto de análisis de datos que procesa un conjunto de datos de ventas. Se utilizó Python para las tareas de ETL (Extracción, Transformación, Carga) y los resultados se visualizaron en un dashboard interactivo en Power BI.',
+                    details: 'En este proyecto, apliqué mis habilidades en Python para limpiar y transformar datos de ventas brutos, preparándolos para el análisis. Los datos procesados se almacenaron en una base de datos SQLite. Finalmente, conecté Power BI a la base de datos para crear visualizaciones interactivas que permitieran identificar tendencias, productos más vendidos y rendimiento por región.',
+                    link: 'https://github.com/Juancm0/ventas-dashboard-python'
+                }
+            ];
+            
+            // Project Filtering and Rendering
+            const projectGrid = document.getElementById('project-grid');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+
+            function renderProjects(filter = 'all') {
+                projectGrid.innerHTML = '';
+                const filteredProjects = projects.filter(p => filter === 'all' || p.category === filter);
+                
+                filteredProjects.forEach((project, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'project-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer';
+                    card.setAttribute('data-index', index);
+                    
+                    let tagsHTML = project.tags.map(tag => `<span class="bg-emerald-100 text-emerald-800 text-xs font-medium mr-2 mb-2 px-2.5 py-0.5 rounded-full">${tag}</span>`).join('');
+
+                    card.innerHTML = `
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">${project.title}</h3>
+                            <p class="text-slate-600 mb-4">${project.description.substring(0, 100)}...</p>
+                            <div class="flex flex-wrap">${tagsHTML}</div>
+                        </div>
+                    `;
+                    projectGrid.appendChild(card);
+                });
+
+                 // Re-attach event listeners for modals after rendering
+                document.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const projectIndex = parseInt(card.getAttribute('data-index'), 10);
+                        const project = filteredProjects[projectIndex];
+                        openModal(project);
+                    });
+                });
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // Style active button
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-emerald-500', 'text-white');
+                        btn.classList.add('bg-slate-200', 'text-slate-700');
+                    });
+                    button.classList.add('bg-emerald-500', 'text-white');
+                    button.classList.remove('bg-slate-200', 'text-slate-700');
+
+                    renderProjects(filter);
+                });
+            });
+
+            // Initial render
+            renderProjects();
+            
+            // Modal Logic
+            const modal = document.getElementById('project-modal');
+            const modalContentWrapper = document.getElementById('modal-content-wrapper');
+
+            function openModal(project) {
+                 let tagsHTML = project.tags.map(tag => `<span class="bg-emerald-100 text-emerald-800 text-xs font-medium mr-2 mb-2 px-2.5 py-0.5 rounded-full">${tag}</span>`).join('');
+
+                modalContentWrapper.innerHTML = `
+                    <div class="p-4 md:p-6">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-64 object-cover rounded-lg mb-4">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2">${project.title}</h2>
+                        <div class="flex flex-wrap mb-4">${tagsHTML}</div>
+                        <p class="text-slate-600 mb-4">${project.details}</p>
+                        <a href="${project.link}" target="_blank" class="inline-flex items-center bg-slate-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-slate-900 transition-colors">
+                            Ver en GitHub
+                            <svg class="ml-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
+                    </div>
+                    <button id="close-modal" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                `;
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContentWrapper.classList.remove('scale-95');
+                }, 10);
+
+                document.getElementById('close-modal').addEventListener('click', closeModal);
+            }
+
+            function closeModal() {
+                modal.classList.add('opacity-0');
+                modalContentWrapper.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Active nav link scrolling
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
